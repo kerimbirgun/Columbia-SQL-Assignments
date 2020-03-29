@@ -1,0 +1,89 @@
+
+cqlsh> CREATE KEYSPACE virtual_library WITH replication = {'class':'SimpleStrategy', 'replication_factor':'1'} AND durable_writes='true';
+cqlsh> USE virtual_library;
+
+cqlsh:virtual_library>CREATE TABLE ebook_by_id (
+	book_id int, 
+	book_title text,
+	p_author text,
+	s_author text, 
+	date_publ timestamp, 
+	pages int,
+	publisher text,
+	translator text,
+	topic text,
+	PRIMARY KEY(book_id));
+
+cqlsh:virtual_library>INSERT INTO ebook_by_id (book_id,book_title,p_author,s_author,date_publ,pages,publisher,translator,topic) VALUES (1,'The girl with no name','Lisa Regan','Dan Brown','2018-04-02',337,'Goodreads','No','Fiction');
+cqlsh:virtual_library>INSERT INTO ebook_by_id (book_id,book_title,p_author,s_author,date_publ,pages,publisher,translator,topic) VALUES (2,'R for Marketing','Chris Chapman','Feit McDonnel','2015-01-02',101,'Springer','No',{'Analytics':'Machine Learning'});
+cqlsh:virtual_library>INSERT INTO ebook_by_id (book_id,book_title,p_author,s_author,date_publ,pages,publisher,translator,topic) VALUES (3,'Origin','Dan Brown','Lisa Regan','2017-10-01',480,'Knopf Doubeday','Yes','Fiction');
+cqlsh:virtual_library>INSERT INTO ebook_by_id (book_id,book_title,p_author,s_author,date_publ,pages,publisher,translator,topic) VALUES (4,'Machine learning for business','Russell Archey','Audrei Reik','2019-03-04',340,'John Medicine','No',{'Business':'Mchine Learning'});
+
+
+cqlsh:virtual_library>CREATE TABLE users_by_id (
+	user_id int,
+	name text,
+	phone int,
+	address text,
+	university_affiltext,
+	PRIMARY KEY(user_id));
+
+cqlsh:virtual_librart>INSERT INTO users_by_id (user_id,name,phone,address,university_affil) VALUES (1,'Jim Jones',6544151712,'101W01street','Columbia');
+cqlsh:virtual_librart>INSERT INTO users_by_id (user_id,name,phone,address,university_affil) VALUES (2,'Rita Bita',4544151324,'102E02street','NYU');
+cqlsh:virtual_librart>INSERT INTO users_by_id (user_id,name,phone,address,university_affil) VALUES (3,'Holly Dew',6557244534,'105W03street','NYU');
+cqlsh:virtual_librart>INSERT INTO users_by_id (user_id,name,phone,address,university_affil) VALUES (4,'Pablo Escobar',4398452343,'104E04street','Columbia');
+cqlsh:virtual_librart>INSERT INTO users_by_id (user_id,name,phone,address,university_affil) VALUES (5,'Al Capone',3242343523,'106W04street','Columbia');
+
+cqlsh:virtual_library>CREATE TABLE ebook_by_checkout (
+	book_id int,
+	check_out timestamp, 
+	book_title text,
+	PRIMARY KEY(check_out));
+
+cqlsh:virtual_library>INSERT INTO ebook_by_checkout (book_id,check_out,book_title) VALUES (1, '2020-03-01', 'The girl with no name');
+cqlsh:virtual_library>INSERT INTO ebook_by_checkout (book_id,check_out,book_title) VALUES (2, '2020-01-02', 'R for Marketing');
+cqlsh:virtual_library>INSERT INTO ebook_by_checkout (book_id,check_out,book_title) VALUES (3, '2020-02-15', 'Origin');
+cqlsh:virtual_library>INSERT INTO ebook_by_checkout (book_id,check_out,book_title) VALUES (4, '2019-12-01', 'Machine learning for business');
+
+cqlsh:virtual_library>CREATE TABLE user_book (
+	user_id int,
+	book_id int,
+	check_out time,
+	PRIMARY KEY((user_id, book_id)));
+
+cqlsh:virtual_library>INSERT INTO user_book (user_id, book_id, check_out) VALUES (1, 3, '2020-01-03');
+cqlsh:virtual_library>INSERT INTO user_book (user_id, book_id, check_out) VALUES (2, 1, '2020-03-01');
+cqlsh:virtual_library>INSERT INTO user_book (user_id, book_id, check_out) VALUES (3, 4, '2020-02-17');
+cqlsh:virtual_library>INSERT INTO user_book (user_id, book_id, check_out) VALUES (4, 2, '2019-12-03');
+
+cqlsh:virtual_library>CREATE TABLE Columbia_ML (
+	check_out timestamp,
+	user_id int,
+	book_id int,
+	topic text,
+	univ_affil text,
+	PRIMARY KEY(topic, univ_affil));
+
+cqlsh:virtual_library> INSERT INTO Columbia_ML (check_out, user_id, book_id, topic, univ_affil) VALUES ('2020-03-01', 3, 2, 'Analytics', 'Columbia');
+cqlsh:virtual_library> INSERT INTO Columbia_ML (check_out, user_id, book_id, topic, univ_affil) VALUES ('2020-02-01', 2, 4, 'Machine Learning', 'NYU');
+cqlsh:virtual_library> INSERT INTO Columbia_ML (check_out, user_id, book_id, topic, univ_affil) VALUES ('2020-02-15', 4, 2, 'Analytics', 'Columbia');
+cqlsh:virtual_library> INSERT INTO Columbia_ML (check_out, user_id, book_id, topic, univ_affil) VALUES ('2019-12-01', 5, 4, 'Machine Learning', 'Columbia');
+
+---------
+
+QUERIES
+
+cqlsh:virtual_library>SELECT book_title, check_out FROM ebook_by_checkout WHERE check_out>='2020-01-01' AND check_out<='2020-03-01'
+
+cqlsh:virtual_library>SELECT user_id, book_id, check_out FROM user_by_ebook
+
+cqlsh:virtual_library>SELECT Topic, COUNT(book_id) FROM ebook_by_id
+
+cqlsh:virtual_library>SELECT user_id, book_id FROM Columbia_ML WHERE topic = 'Machine Learning' AND univ_affil = 'Columbia'
+
+
+
+
+
+
+
