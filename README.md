@@ -1,1 +1,1 @@
-# Columbia-SQL-Assignments
+# Columbia-Advanced-SQL-Challenges
